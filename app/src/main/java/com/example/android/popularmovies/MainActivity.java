@@ -1,9 +1,14 @@
 package com.example.android.popularmovies;
 
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import org.json.JSONException;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import butterknife.BindView;
@@ -13,10 +18,8 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.recyclerview) RecyclerView recyclerView;
 
     private MovieAdapter movieAdapter;
-
     private static final String TAG = MainActivity.class.getSimpleName();
-
-    private static final int GRID_SPAN_COUNT = 3;
+    private static final int GRID_SPAN_COUNT = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +32,50 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
 
         List<MovieData> movies = new ArrayList<>();
-
         movieAdapter = new MovieAdapter(movies);
         recyclerView.setAdapter(movieAdapter);
+        loadMovieData();
 
+    }
+
+    private void loadMovieData() {
+        String sort = MoviePreferences.getPreferredSortCriteria(this);
+        new FetchMovieTask().execute(sort);
+    }
+
+    public class FetchMovieTask extends AsyncTask<String, Void, List<MovieData>> {
+        @Override
+        protected List<MovieData> doInBackground(String... params) {
+            if (params.length == 0) {
+                return null;
+            }
+
+            String url = params[0];
+            URL movieRequestUrl = NetworkUtils.buildMovieUrl(url);
+
+            try {
+                String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(movieRequestUrl);
+
+                List<MovieData> jsonMovieData = JsonUtils.parseMovieJson(jsonMovieResponse);
+
+                return jsonMovieData;
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                Log.e(TAG, "Problems in JSON results.");
+            }
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(List<MovieData> movies) {
+            movieAdapter.clearAll();
+
+            if (movies != null && !movies.isEmpty()) {
+                movieAdapter.addAll(movies);
+            }
+        }
     }
 
 }
