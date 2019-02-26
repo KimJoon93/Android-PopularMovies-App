@@ -1,16 +1,20 @@
 package com.example.android.popularmovies;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -21,12 +25,14 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler {
+public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler, SharedPreferences.OnSharedPreferenceChangeListener {
     @BindView(R.id.recyclerview) RecyclerView recyclerView;
 
     private MovieAdapter movieAdapter;
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int GRID_SPAN_COUNT = 2;
+
+    private String mSortCriteria;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +49,21 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         movieAdapter = new MovieAdapter(movies, this);
         recyclerView.setAdapter(movieAdapter);
         loadMovieData();
+        setupSharedPreferences();
 
     }
+
+    private void setupSharedPreferences(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+
+    }
+
+
 
     @Override
     public void onItemClick(MovieData movie) {
@@ -61,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         String sort = MoviePreferences.getPreferredSortCriteria(this);
         new FetchMovieTask().execute(sort);
     }
+
 
 
 

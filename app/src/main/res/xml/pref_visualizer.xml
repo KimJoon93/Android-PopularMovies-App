@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <CheckBoxPreference
-        android:defaultValue="true"
-        android:key="show_bass"
-        android:summaryOff="Hidden"
-        android:summaryOn="Shown"
-        android:title="Show Bass"/>
-
-
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <ListPreference
+        android:summary=""
+        android:defaultValue="@string/pref_sort_by_default"
+        android:entries="@array/pref_sort_by_options"
+        android:entryValues="@array/pref_sort_by_values"
+        android:key="@string/pref_sort_by_key"
+        android:title="@string/pref_sort_by_label" />
 </PreferenceScreen>
