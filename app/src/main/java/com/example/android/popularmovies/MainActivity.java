@@ -107,13 +107,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
 
-        switch (item.getItemId()){
-            case R.id.action_settings:
-                Toast.makeText(this,"hohohohooh",Toast.LENGTH_LONG).show();
-                return true;
+        if(id == R.id.action_settings){
+            Intent optionIntent = new Intent(this, SettingActivity.class);
+            startActivity(optionIntent);
+            return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }
