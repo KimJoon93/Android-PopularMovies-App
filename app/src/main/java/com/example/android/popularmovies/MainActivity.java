@@ -9,7 +9,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import java.io.IOException;
@@ -103,5 +105,15 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
 
+        switch (item.getItemId()){
+            case R.id.action_settings:
+                Toast.makeText(this,"hohohohooh",Toast.LENGTH_LONG).show();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }
