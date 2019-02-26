@@ -19,10 +19,17 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     private List<MovieData> mMovies;
 
-    public MovieAdapter(List<MovieData> movies) {
-        mMovies = movies;
+    private final MovieAdapterOnClickHandler mOnClickHandler;
+
+    public interface MovieAdapterOnClickHandler {
+        void onItemClick(MovieData movie);
     }
 
+    public MovieAdapter(List<MovieData> movies, MovieAdapterOnClickHandler onClickHandler) {
+        mMovies = movies;
+        mOnClickHandler = onClickHandler;
+
+    }
 
     @NonNull
     @Override
@@ -35,14 +42,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder movieViewHolder, int i) {
         MovieData movie = mMovies.get(i);
-       // String title = movie.getmTitle();
         String thumbnail = movie.getmThmbnai();
-        //double voteAvg = movie.getmVoteAverage();
-  //      movieViewHolder.titleTextView.setText(title);
         Picasso.with(movieViewHolder.itemView.getContext())
                 .load(thumbnail)
                 .into(movieViewHolder.thumbnailImageView);
-//        movieViewHolder.voteAvgTextView.setText(String.valueOf(voteAvg));
     }
 
     @Override
@@ -67,7 +70,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         notifyDataSetChanged();
     }
 
-    public class MovieViewHolder extends RecyclerView.ViewHolder {
+    public class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         @BindView(R.id.thubnail_iv) ImageView thumbnailImageView;
 
@@ -76,6 +79,15 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         public MovieViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int adapterPosition = getAdapterPosition();
+            MovieData movie = mMovies.get(adapterPosition);
+            mOnClickHandler.onItemClick(movie);
         }
     }
+
 }

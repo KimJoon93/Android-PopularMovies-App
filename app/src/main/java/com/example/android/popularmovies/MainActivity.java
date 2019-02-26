@@ -1,11 +1,14 @@
 package com.example.android.popularmovies;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+
 import org.json.JSONException;
 import java.io.IOException;
 import java.net.URL;
@@ -14,7 +17,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler {
     @BindView(R.id.recyclerview) RecyclerView recyclerView;
 
     private MovieAdapter movieAdapter;
@@ -32,16 +35,29 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
 
         List<MovieData> movies = new ArrayList<>();
-        movieAdapter = new MovieAdapter(movies);
+        movieAdapter = new MovieAdapter(movies, this);
         recyclerView.setAdapter(movieAdapter);
         loadMovieData();
 
+    }
+
+    @Override
+    public void onItemClick(MovieData movie) {
+        Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+        intent.putExtra("MovieTitle",movie.getmTitle());
+        intent.putExtra("MovieDate",movie.getMdata());
+        intent.putExtra("Movievote",movie.getmVoteAverage());
+        intent.putExtra("MovieOverview",movie.getmOverview());
+        intent.putExtra("MovieThumbnail",movie.getmThmbnai());
+        startActivity(intent);
     }
 
     private void loadMovieData() {
         String sort = MoviePreferences.getPreferredSortCriteria(this);
         new FetchMovieTask().execute(sort);
     }
+
+
 
     public class FetchMovieTask extends AsyncTask<String, Void, List<MovieData>> {
         @Override
