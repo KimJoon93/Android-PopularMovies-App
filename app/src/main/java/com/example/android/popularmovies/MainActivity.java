@@ -25,14 +25,13 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler, SharedPreferences.OnSharedPreferenceChangeListener {
+public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler{
     @BindView(R.id.recyclerview) RecyclerView recyclerView;
 
     private MovieAdapter movieAdapter;
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int GRID_SPAN_COUNT = 2;
 
-    private String mSortCriteria;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,19 +48,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         movieAdapter = new MovieAdapter(movies, this);
         recyclerView.setAdapter(movieAdapter);
         loadMovieData();
-        setupSharedPreferences();
 
     }
 
-    private void setupSharedPreferences(){
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-    }
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-
-    }
 
 
 
@@ -77,11 +67,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
     private void loadMovieData() {
-        String sort = MoviePreferences.getPreferredSortCriteria(this);
+        String sort = MoviePreference.getPreferredSortCriteria(this);
         new FetchMovieTask().execute(sort);
     }
-
-
 
 
     public class FetchMovieTask extends AsyncTask<String, Void, List<MovieData>> {
