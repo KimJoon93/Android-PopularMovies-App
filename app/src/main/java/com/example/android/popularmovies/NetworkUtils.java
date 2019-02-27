@@ -19,7 +19,7 @@ public class NetworkUtils {
 
     private static final String API_KEY_PARAM = "api_key";
 
-    private static final String API_KEY = "4957bb77331eccf845ff68490d9a338b";
+    private static final String API_KEY = "";
 
     public static URL buildMovieUrl(String sortCriteria) {
         Uri builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
