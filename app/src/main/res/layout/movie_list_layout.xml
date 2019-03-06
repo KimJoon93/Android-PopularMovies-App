@@ -11,4 +11,10 @@
         android:layout_width="match_parent"
         android:layout_height="300dp" />
 
+    <TextView
+        android:textStyle="bold"
+        android:id="@+id/movietitle_tv"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
 </LinearLayout>
